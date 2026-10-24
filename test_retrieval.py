@@ -9,6 +9,7 @@ from retriever import search, tokens
 
 HERE = Path(__file__).resolve().parent
 
+
 @pytest.fixture(scope="module")
 def documents() -> list[Document]:
     return load_fixtures(HERE).documents
@@ -71,9 +72,7 @@ def test_q05_relevant_synonym_is_missed(documents: list[Document]) -> None:
     assert evaluate([], {"d10"}) == (0.0, 0.0, 0.0)
 
 
-def test_q06_has_no_gold_and_no_results(
-    documents: list[Document], queries: list[Query]
-) -> None:
+def test_q06_has_no_gold_and_no_results(documents: list[Document], queries: list[Query]) -> None:
     q06 = next(case for case in queries if case["id"] == "q06")
     assert q06["relevant"] == []
     assert search(str(q06["query"]), documents) == []
@@ -85,9 +84,7 @@ def test_regression_detected_when_relevant_falls_below_three() -> None:
     assert (before, after) == (1.0, 0.0)
 
 
-def test_fixture_rankings_and_macro(
-    documents: list[Document], queries: list[Query]
-) -> None:
+def test_fixture_rankings_and_macro(documents: list[Document], queries: list[Query]) -> None:
     expected = {
         "q01": ["d01"],
         "q02": ["d04", "d05", "d06"],
@@ -104,14 +101,10 @@ def test_fixture_rankings_and_macro(
         if relevant:
             scores.append(evaluate(ranking, relevant))
     assert len(scores) == 5
-    assert [sum(row[i] for row in scores) / 5 for i in range(3)] == pytest.approx(
-        [4 / 15, 0.7, 0.8]
-    )
+    assert [sum(row[i] for row in scores) / 5 for i in range(3)] == pytest.approx([4 / 15, 0.7, 0.8])
 
 
-def test_fixture_id_integrity(
-    documents: list[Document], queries: list[Query]
-) -> None:
+def test_fixture_id_integrity(documents: list[Document], queries: list[Query]) -> None:
     ids = [doc["id"] for doc in documents]
     assert len(ids) == len(set(ids)) == 10
     assert len(queries) == 6

@@ -56,7 +56,5 @@ def load_fixtures(directory: Path = DIRECTORY) -> Fixtures:
             or not isinstance(reason, str)
         ):
             raise ValueError("qrels.json: invalid query row")
-        queries.append(
-            {"id": query_id, "query": query, "relevant": relevant, "reason": reason}
-        )
+        queries.append({"id": query_id, "query": query, "relevant": relevant, "reason": reason})
     return Fixtures(documents=documents, queries=queries)
